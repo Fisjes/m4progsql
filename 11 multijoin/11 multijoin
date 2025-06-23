@@ -1,0 +1,53 @@
+
+SELECT
+  k.naam,
+  SUM(CAST(d.MBs AS UNSIGNED)) AS totaal_mbs
+FROM tel_klant k
+JOIN tel_dataverbruik d ON k.id = d.klant_id
+GROUP BY k.id;
+
+
+SELECT
+  k.naam,
+  SUM(s.aantalpaginas) AS totaal_sms
+FROM tel_klant k
+JOIN tel_smsverbruik s ON k.id = s.klant_id
+GROUP BY k.id;
+
+
+SELECT
+  k.naam,
+  SUM(CEIL(TIMESTAMPDIFF(SECOND, g.startdatum, g.einddatum) / 60)) AS totaal_belminuten
+FROM tel_klant k
+JOIN tel_gesprekken g ON k.id = g.klant_id
+GROUP BY k.id;
+
+
+SELECT
+  k.naam,
+  SUM(CAST(d.MBs AS UNSIGNED)) AS totaal_mbs_feb
+FROM tel_klant k
+JOIN tel_dataverbruik d ON k.id = d.klant_id
+WHERE d.datum BETWEEN '2024-02-01' AND '2024-02-29 23:59:59'
+GROUP BY k.id;
+
+SELECT
+  k.naam,
+  c.id AS contract_id,
+  a.naam AS abonnement_naam
+FROM tel_klant k
+JOIN klant_has_contract khc ON k.id = khc.klant_id
+JOIN contract c ON khc.contract_id = c.id
+JOIN abonnement a ON c.abonnement_id = a.id;
+
+
+SELECT
+  k.naam,
+  c.id AS contract_id,
+  a.naam AS abonnement_naam,
+  t.naam AS tarief_naam
+FROM tel_klant k
+JOIN klant_has_contract khc ON k.id = khc.klant_id
+JOIN contract c ON khc.contract_id = c.id
+JOIN abonnement a ON c.abonnement_id = a.id
+JOIN tarief t ON a.tarief_id = t.id;
