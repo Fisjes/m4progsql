@@ -1,0 +1,1 @@
+SELECT naam FROM `huisdieren`
